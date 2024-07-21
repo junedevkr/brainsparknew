@@ -1,0 +1,99 @@
+
+  
+.institutionSection {
+    margin-bottom: 30px;
+  }
+  
+  .institutionName {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px; /* Increased max-width for PC version */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .leftColumn, .rightColumn {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  
+  .rightColumn {
+    flex: 1;
+  }
+  
+  .innerScheduleTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .innerScheduleTable th, .innerScheduleTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .innerScheduleTable th {
+    background-color: #f2f2f2;
+  }
+  
+  @media (min-width: 769px) {
+    .cardsContainer {
+      flex-direction: row;
+    }
+  
+    .cardContent {
+      flex-direction: row;
+    }
+  
+    .rightColumn {
+      margin-left: 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .cardsContainer {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .card {
+      width: 90%;
+    }
+  
+    .cardContent {
+      flex-direction: column;
+    }
+  
+    .leftColumn, .rightColumn {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .rightColumn {
+      margin-top: 20px;
+    }
+  }
+  

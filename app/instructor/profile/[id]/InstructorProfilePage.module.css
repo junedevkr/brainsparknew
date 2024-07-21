@@ -1,0 +1,92 @@
+.container {
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profileSection {
+  margin-bottom: 30px;
+}
+
+.profileTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* Automatically adjust column widths based on content */
+}
+
+.profileTable th, .profileTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.profileTable th {
+  background-color: #f2f2f2;
+}
+
+.label {
+  width: 20%;
+}
+
+.value {
+  width: 80%;
+}
+
+.editableField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.fieldContent {
+  display: flex;
+  align-items: center;
+}
+
+.editButton, .saveButton, .addButton {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.editButton:hover, .saveButton:hover, .addButton:hover {
+  background-color: #45a049;
+}
+
+.deleteButton {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.deleteButton:hover {
+  background-color: #ff1a1a;
+}
+
+@media (max-width: 768px) {
+  .profileTable tr {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+
+  .profileTable th {
+    background-color: transparent;
+  }
+
+  .label {
+    max-width: fit-content;
+    word-wrap: none;
+    white-space: nowrap;
+  }
+}

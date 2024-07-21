@@ -1,0 +1,63 @@
+.container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .button {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #0051bb;
+  }
+  
+  .error {
+    color: #ff0000;
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .switchLink {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .switchLink a {
+    color: #4CAF50;
+    text-decoration: none;
+  }
+  
+  .switchLink a:hover {
+    text-decoration: underline;
+  }

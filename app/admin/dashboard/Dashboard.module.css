@@ -1,0 +1,307 @@
+.container {
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.nav a {
+    padding: 0.5rem 1rem;
+    background-color: #3498db;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.nav a:hover {
+    background-color: #2980b9;
+}
+
+.nav a.active {
+    background-color: #2c3e50;
+}
+
+
+.title {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sectionTitle {
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+
+/* 테이블부분 */
+
+.tableContainer {
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .th, .td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .thContent, .tdContent {
+    width: 33.33%;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  .editable {
+    width: 100%;
+    resize: vertical;
+    min-height: 20px;
+  }
+  
+  .placeholder {
+    color: #999;
+  }
+
+
+/* 투두리부분 */
+.button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+.statusBlue {
+    background-color: #add8e6;
+}
+
+.statusYellow {
+    background-color: #ffffe0;
+}
+
+.statusGreen {
+    background-color: #98fb98;
+}
+
+.statusRed {
+    background-color: #f08080;
+}
+
+.statusGray {
+    background-color: #d3d3d3;
+}
+
+.icon {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.popup {
+    position: absolute;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.inline {
+    display: flex;
+    align-items: center;
+}
+
+.inline span, .inline input, .inline select {
+    flex: 1;
+}
+
+.inline .icon {
+    flex: 0 0 auto;
+}
+
+
+.deleteButton {
+    background-color: #f08080;
+    color: white;
+    border: none;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+    background-color: #e74c3c;
+}
+
+
+.contentWrapper {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: 100px;
+  }
+  
+  .content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    position: relative; /* 아이콘을 content 내부에 정렬하기 위해 상대 위치 설정 */
+    padding-right: 20px;
+  }
+  
+  .noteIcon {
+    cursor: pointer;
+    width: 20px;
+    flex: 0 0 auto;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+      
+.expandedContent {
+    white-space: normal; /* content 셀 확장 시 줄바꿈 적용 */
+    max-width: none; /* content 셀 확장 시 최대 크기 제한 해제 */
+}
+
+.actionButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+
+
+.dateTimeInput {
+    font-size: 0.8rem;
+}
+
+
+
+
+.pagination {
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .activePage {
+    font-weight: bold;
+  }
+
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  .noteTextarea {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .modalButtons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .saveButton, .cancelButton {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .saveButton {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .cancelButton {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .editButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }

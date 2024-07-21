@@ -1,0 +1,82 @@
+/* styles/fullcalendar-custom.css */
+
+/* FullCalendar container */
+.calendarContainer {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Day cell styles */
+.fc .fc-daygrid-day {
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Event styles */
+.fc .fc-event {
+  border-color: #007bff;
+  color: white;
+}
+
+/* Toolbar styles */
+.fc .fc-toolbar {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Header styles */
+.fc .fc-toolbar-title {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Button styles */
+.fc .fc-button {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+.fc .fc-button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* Table border styles */
+.fc .fc-scrollgrid {
+  border: 1px solid #ddd;
+}
+
+/* Selected day styles */
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: rgb(255, 255, 0);
+}
+
+/* Day number styles */
+.fc .fc-daygrid-day-top {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.fc .fc-daygrid-day-events {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.fc .fc-daygrid-day-frame {
+  height: 100%;
+}
+
+/* Event time styles */
+.fc .fc-event-time {
+  font-weight: bold;
+}
+
+/* Event title styles */
+.fc .fc-event-title {
+  font-weight: normal;
+}
+
+/* More link styles */
+.fc .fc-daygrid-more-link {
+  color: #007bff;
+}

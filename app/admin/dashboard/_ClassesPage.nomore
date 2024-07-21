@@ -1,0 +1,435 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import styles from './Dashboard.module.css'
+import { columnConfig } from './InquiriesPage'
+import ApplicantsPopup from './ApplicantsPopup';
+
+export default function ClassesPage() {
+  const supabase = createClientComponentClient()
+  const [classes, setClasses] = useState<any[]>([])
+  const [inquiries, setInquiries] = useState<any[]>([])
+  const [instructors, setInstructors] = useState<any[]>([])
+  const [showApplicantsPopup, setShowApplicantsPopup] = useState(false)
+  const [currentApplicants, setCurrentApplicants] = useState<{ classId: string, type: 'main' | 'sub', applicants: string[] } | null>(null);
+
+  const [showInquiryColumns, setShowInquiryColumns] = useState(
+    columnConfig.reduce((acc, { key }) => {
+      acc[key] = key === 'institution' || key === 'location';
+      return acc;
+    }, {})
+  );
+
+  const [showPopup, setShowPopup] = useState(false)
+  const [popupPosition, setPopupPosition] = useState<{ x: number, y: number } | null>(null)
+  const [editingField, setEditingField] = useState<{ id: string, key: string } | null>(null)
+  const [editValue, setEditValue] = useState<string>('')
+
+  useEffect(() => {
+    fetchData()
+    fetchInstructors()
+  }, [])
+
+  const fetchData = async () => {
+    let { data: inquiriesData, error: inquiriesError } = await supabase
+      .from('inquiries')
+      .select('*')
+      .eq('status', '확정')
+    
+    if (inquiriesError) {
+      console.error('Error fetching inquiries:', inquiriesError)
+    } else if (inquiriesData) {
+      setInquiries(inquiriesData)
+    }
+
+    let { data: classesData, error: classesError } = await supabase
+      .from('classes')
+      .select('*')
+    
+    if (classesError) {
+      console.error('Error fetching classes:', classesError)
+    } else if (classesData) {
+      setClasses(classesData)
+    }
+  }
+
+  const handleStatusChange = async (id: string, status: string) => {
+    console.log(`Updating status for class ${id} to ${status}`); // 디버깅용 로그
+    const { data, error } = await supabase
+      .from('classes')
+      .update({ class_open_status: status })
+      .eq('id', id)
+      .select()
+  
+    if (error) {
+      console.error('Error updating status:', error)
+    } else {
+      console.log('Status updated successfully:', data); // 디버깅용 로그
+      fetchData()
+      if (status === '모집중') {
+        // TODO: 모든 강사에게 알림을 보내는 함수 호출
+        // notifyInstructors(id)
+      }
+    }
+  }
+  const handleApplicantSelection = async (classId: string, instructorId: string, type: 'main' | 'sub') => {
+    const { data: classData, error: fetchError } = await supabase
+      .from('classes')
+      .select('apply_main, apply_sub, instructor_main, instructor_sub')
+      .eq('id', classId)
+      .single()
+  
+    if (fetchError) {
+      console.error('Error fetching class data:', fetchError)
+      return
+    }
+  
+    // 배열이 아닌 경우 빈 배열로 초기화
+    const applyMain = Array.isArray(classData.apply_main) ? classData.apply_main : []
+    const applySub = Array.isArray(classData.apply_sub) ? classData.apply_sub : []
+    const instructorMain = Array.isArray(classData.instructor_main) ? classData.instructor_main : []
+    const instructorSub = Array.isArray(classData.instructor_sub) ? classData.instructor_sub : []
+  
+    let updateData = {}
+    if (type === 'main') {
+      if (instructorMain.includes(instructorId)) {
+        // 체크 해제: instructor_main에서 제거
+        updateData = { 
+          instructor_main: instructorMain.filter(id => id !== instructorId)
+        }
+      } else {
+        // 체크: instructor_main에 추가
+        updateData = { 
+          instructor_main: [...instructorMain, instructorId]
+        }
+      }
+    } else if (type === 'sub') {
+      if (instructorSub.includes(instructorId)) {
+        // 체크 해제: instructor_sub에서 제거
+        updateData = {
+          instructor_sub: instructorSub.filter(id => id !== instructorId)
+        }
+      } else {
+        // 체크: instructor_sub에 추가
+        updateData = {
+          instructor_sub: [...instructorSub, instructorId]
+        }
+      }
+    }
+  
+    console.log('Update data:', updateData);  // 디버깅을 위해 추가
+  
+    const { error } = await supabase
+      .from('classes')
+      .update(updateData)
+      .eq('id', classId)
+  
+    if (error) {
+      console.error(`Error updating ${type} instructor:`, error)
+    } else {
+      fetchData()
+    }
+  }
+  
+  
+  
+    
+    
+
+  const renderApplicantsPopup = () => {
+    if (!currentApplicants) return null;
+  
+    const currentClass = classes.find(c => c.id === currentApplicants.classId);
+    if (!currentClass) return null;
+  
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.popup}>
+          <h3>{currentApplicants.type === 'main' ? '메인' : '보조'} 강사 지원자</h3>
+          {currentApplicants.applicants.map(applicantId => {
+            const instructor = instructors.find(i => i.id === applicantId);
+            const isSelected = currentApplicants.type === 'main'
+              ? currentClass.instructor_main?.includes(applicantId)
+              : currentClass.instructor_sub?.includes(applicantId);
+            
+            return (
+              <div key={applicantId}>
+                <input 
+                  type="checkbox" 
+                  id={`applicant-${applicantId}`}
+                  onChange={() => handleApplicantSelection(currentApplicants.classId, applicantId, currentApplicants.type)}
+                  checked={isSelected}
+                />
+                <label htmlFor={`applicant-${applicantId}`}>{instructor?.name}</label>
+              </div>
+            );
+          })}
+          <button onClick={() => setCurrentApplicants(null)}>닫기</button>
+        </div>
+      </div>
+    );
+  };
+      
+  const openApplicantsPopup = (type: 'main' | 'sub', applicants: string[], classId: string) => {
+    setCurrentApplicants({ type, applicants, classId })
+    setShowApplicantsPopup(true)
+  }
+    
+
+  const fetchInstructors = async () => {
+    let { data: instructorsData } = await supabase.from('instructor_profiles').select('*')
+    if (instructorsData) setInstructors(instructorsData)
+  }
+
+  const handleEdit = (id: string, key: string, value: string) => {
+    setEditingField({ id, key })
+    setEditValue(value)
+  }
+
+  const handleSave = async () => {
+    if (editingField) {
+      const { id, key } = editingField
+      const { error } = await supabase
+        .from('classes')
+        .update({ [key]: editValue })
+        .eq('id', id)
+
+      if (error) {
+        console.error('Error updating data:', error)
+      } else {
+        fetchData()
+      }
+      setEditingField(null)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSave()
+    }
+  }
+
+  const handleUpdate = async (id: string, key: string, value: any) => {
+    const { error } = await supabase.from('classes').update({ [key]: value }).eq('id', id)
+    if (error) {
+      console.error('Error updating data:', error)
+    } else {
+      fetchData()
+      setEditingField(null)
+    }
+  }
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target
+    setShowInquiryColumns(prevState => ({
+      ...prevState,
+      [name]: checked
+    }))
+  }
+
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString)
+    const yyyy = date.getFullYear()
+    const mm = String(date.getMonth() + 1).padStart(2, '0')
+    const dd = String(date.getDate()).padStart(2, '0')
+    const hh = String(date.getHours()).padStart(2, '0')
+    const min = String(date.getMinutes()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`
+  }
+
+  const handleTextSave = () => {
+    if (editingField) {
+      handleUpdate(editingField.id, editingField.key, editValue)
+      setEditingField(null)
+    }
+  }
+
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === 'Tab') {
+      event.preventDefault()
+      handleTextSave()
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress)
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [editingField, editValue])
+
+  const handleScheduleClick = () => {
+    setShowPopup(true)
+    setPopupPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
+  }
+
+  const renderPopup = () => (
+    <div className={styles.overlay}>
+      <div className={styles.popup} style={{ top: popupPosition?.y, left: popupPosition?.x }}>
+        <h3>수업 일정 및 강사 상세등록</h3>
+        <form>
+          <label>수업 일정: <input type="text" name="schedule" /></label>
+          <label>강사 배정: <input type="text" name="assignment" /></label>
+          <button type="submit">등록</button>
+        </form>
+        <button className={styles.button} onClick={() => setShowPopup(false)}>Close</button>
+      </div>
+    </div>
+  )
+
+
+
+  const renderTable = () => (
+    <div className={styles.tableContainer}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            {columnConfig.map(({ key, title }) => (
+              showInquiryColumns[key] && (
+                <th key={key} className={styles.th}>
+                  {title}
+                </th>
+              )
+            ))}
+            <th className={styles.th}>강사1강사비</th>
+            <th className={styles.th}>강사2강사비</th>
+            <th className={`${styles.th} ${styles.thContent}`}>내용</th>
+            <th className={`${styles.th} ${styles.thContent}`}>수업정보추가</th>
+            <th className={`${styles.th} ${styles.thContent}`}>수업상세</th>
+            <th className={styles.th}>모집상태</th>
+            <th className={styles.th}>강사지원현황</th>
+            <th className={styles.th}>상세수업일정배정</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inquiries.map((inquiry) => {
+            const classData = classes.find((c) => c.inquiry_id === inquiry.id) || {}
+            return (
+              <tr key={inquiry.id}>
+                {columnConfig.map(({ key }) => (
+                  showInquiryColumns[key] && (
+                    <td key={key} className={styles.td}>
+                      {key.includes('date') ? formatDateTime(inquiry[key]) : inquiry[key]}
+                    </td>
+                  )
+                ))}
+                <td className={styles.td} onClick={() => handleEdit(classData.id, 'confirmed_instructor1_fee', classData.confirmed_instructor1_fee || '')}>
+                  {editingField?.id === classData.id && editingField?.key === 'confirmed_instructor1_fee' ? (
+                    <textarea
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={handleSave}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                    />
+                  ) : (
+                    classData.confirmed_instructor1_fee || <span className={styles.placeholder}>클릭하여 입력</span>
+                  )}
+                </td>
+                <td className={styles.td} onClick={() => handleEdit(classData.id, 'confirmed_instructor2_fee', classData.confirmed_instructor2_fee || '')}>
+                  {editingField?.id === classData.id && editingField?.key === 'confirmed_instructor2_fee' ? (
+                    <textarea
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={handleSave}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                    />
+                  ) : (
+                    classData.confirmed_instructor2_fee || <span className={styles.placeholder}>클릭하여 입력</span>
+                  )}
+                </td>
+                <td className={`${styles.td} ${styles.tdContent}`} onClick={() => handleEdit(classData.id, 'content', classData.content || '')}>
+                  {editingField?.id === classData.id && editingField?.key === 'content' ? (
+                    <textarea
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={handleSave}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                    />
+                  ) : (
+                    classData.content || <span className={styles.placeholder}>클릭하여 입력</span>
+                  )}
+                </td>
+                <td className={`${styles.td} ${styles.tdContent}`} onClick={() => handleEdit(classData.id, 'additional_notes', classData.additional_notes || '')}>
+                  {editingField?.id === classData.id && editingField?.key === 'additional_notes' ? (
+                    <textarea
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={handleSave}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                    />
+                  ) : (
+                    classData.additional_notes || <span className={styles.placeholder}>클릭하여 입력</span>
+                  )}
+                </td>
+                <td className={`${styles.td} ${styles.tdContent}`} onClick={() => handleEdit(classData.id, 'class_details', classData.class_details || '')}>
+                  {editingField?.id === classData.id && editingField?.key === 'class_details' ? (
+                    <textarea
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={handleSave}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                    />
+                  ) : (
+                    classData.class_details || <span className={styles.placeholder}>클릭하여 입력</span>
+                  )}
+                </td>
+                <td className={styles.td}>
+                  <select
+                    value={classData.class_open_status || '비공개'}
+                    onChange={(e) => handleStatusChange(classData.id, e.target.value)}
+                  >
+                    <option value="비공개">비공개</option>
+                    <option value="모집중">모집중</option>
+                    <option value="모집완료">모집완료</option>
+                  </select>
+                </td>
+                <td className={styles.td}>
+                  <button onClick={() => openApplicantsPopup('main', classData.apply_main || [], classData.id)}>
+                    메인 강사 지원자 ({classData.apply_main?.length || 0})
+                  </button>
+                  <button onClick={() => openApplicantsPopup('sub', classData.apply_sub || [], classData.id)}>
+                    보조 강사 지원자 ({classData.apply_sub?.length || 0})
+                  </button>
+                </td>
+                <td className={styles.td}>
+                  <button onClick={handleScheduleClick}>
+                    수업 일정 및 강사 배정
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      {showPopup && renderPopup()}
+      {showApplicantsPopup && renderApplicantsPopup()}
+    </div>
+  )
+
+  return (
+    <div className={styles.section}>
+      <h2 className={styles.sectionTitle}>수업 관리 및 강사 배정</h2>
+      <div className={styles.checkboxContainer}>
+        {columnConfig.map(({ key, title }) => (
+          <label key={key}>
+            <input
+              type="checkbox"
+              name={key}
+              checked={showInquiryColumns[key]}
+              onChange={handleCheckboxChange}
+            />
+            {title}
+          </label>
+        ))}
+      </div>
+      {renderTable()}
+    </div>
+  )
+}

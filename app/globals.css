@@ -1,0 +1,178 @@
+:root {
+  --max-width: 1100px;
+  --border-radius: 12px;
+  --color-orange-deep: #FF8C00;
+  --color-navy-dark: #000080;
+  --color-navy-light: #0000CD;
+  --color-white: #FFFFFF;
+
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  font-family: 'NanumSquare', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-white);
+  color: var(--color-navy-dark);
+  background: rgba(248, 249, 250, 0.5);
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem 1.5rem ;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-orange-deep);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background-color: #E07800;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Global styles for common elements */
+
+.title {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  font-size: 1.5em;
+  border-bottom: 2px solid var(--text-color);
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  color: var(--secondary-text-color);
+}
+
+.section p {
+  margin: 5px 0;
+  line-height: 1.6;
+  color: var(--light-text-color);
+}
+
+.section label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--secondary-text-color);
+}
+
+.section input[type="text"],
+.section input[type="email"],
+.section input[type="tel"],
+.section input[type="password"],
+.section input[type="date"],
+.section textarea,
+.section select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.section input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.section button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.section button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.section .certificate {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section .certificate input[type="text"],
+.section .certificate input[type="date"] {
+  width: 45%;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left;
+}
+
+.scheduleTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+
+@media print {
+  .container {
+    padding: 0;
+    max-width: none;
+  }
+
+  .section {
+    page-break-inside: avoid;
+  }
+
+  .section h2 {
+    font-size: 1.5em;
+  }
+
+  .section p {
+    font-size: 1em;
+  }
+}

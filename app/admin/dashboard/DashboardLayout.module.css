@@ -1,0 +1,36 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #3498db;
+    padding: 1rem;
+  }
+  
+  .navList {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navItem {
+    cursor: pointer;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+  }
+  
+  .navItem:hover {
+    background-color: #2980b9;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 2rem;
+  }
+  

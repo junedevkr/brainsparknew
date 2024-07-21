@@ -1,0 +1,31 @@
+{
+  "name": "brainspark-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.14",
+    "@fullcalendar/react": "^6.1.14",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.44.2",
+    "fullcalendar": "^6.1.14",
+    "next": "14.2.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-icons": "^5.2.1",
+    "react-modal": "^3.16.1",
+    "react-responsive-carousel": "^3.2.23"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-modal": "^3.16.3",
+    "typescript": "^5"
+  }
+}
