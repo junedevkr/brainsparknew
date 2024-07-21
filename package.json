@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "yum install -y openssl-devel && next build"
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.14",
