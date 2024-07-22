@@ -30,8 +30,6 @@ interface Profile {
   agreement: boolean;
 }
 
-
-
 interface ClassSummary {
   location: string;
   institution: string;
@@ -52,7 +50,6 @@ const AgreementPopup = ({ onClose, onAgree }: { onClose: () => void, onAgree: ()
     </div>
   );
 };
-
 
 type EditableFields = keyof Profile;
 
@@ -142,7 +139,6 @@ export default function InstructorProfilePage({ params }: ProfilePageProps) {
       setIsLoading(false);
     }
   };
-
 
 const fetchProfileData = async () => {
   try {
@@ -373,8 +369,6 @@ const fetchProfileData = async () => {
   const toggleEdit = (field: EditableFields) => {
     setIsEditing(prev => ({ ...prev, [field]: !prev[field] }));
   };
-
-
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -1,6 +1,8 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import styles from './ClassApplication.module.css'
+'use client';
+
+import { useState, useEffect } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import styles from './ClassApplication.module.css';
 
 interface Class {
   id: string;
@@ -31,27 +33,78 @@ interface Schedule {
   end_period: number;
 }
 
-export default async function ClassApplicationPage() {
-  const supabase = createServerComponentClient({ cookies })
+const ClassApplicationPage = () => {
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
+  const supabase = createClientComponentClient();
 
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const { data: classes = [] } = await supabase
-    .from('classes')
-    .select('*')
-    .eq('class_open_status', '모집중')
+  const fetchData = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setUserId(user.id);
+    }
 
-  const { data: inquiries = [] } = await supabase
-    .from('inquiries')
-    .select('id, location, institution')
+    const { data: classesData } = await supabase
+      .from('classes')
+      .select('*')
+      .eq('class_open_status', '모집중');
 
-  const { data: schedules = [] } = await supabase
-    .from('class_schedule')
-    .select('*')
+    const { data: inquiriesData } = await supabase
+      .from('inquiries')
+      .select('id, location, institution');
 
-  const groupedClasses = (classes as Class[]).reduce((acc, classItem) => {
-    const inquiry = (inquiries as Inquiry[]).find(i => i.id === classItem.inquiry_id);
+    const { data: schedulesData } = await supabase
+      .from('class_schedule')
+      .select('*');
+
+    setClasses(classesData || []);
+    setInquiries(inquiriesData || []);
+    setSchedules(schedulesData || []);
+  };
+
+  const handleApply = async (classId: string, type: 'main' | 'sub') => {
+    if (!userId) return;
+
+    const classToUpdate = classes.find(c => c.id === classId);
+    if (!classToUpdate) return;
+
+    const column = type === 'main' ? 'apply_main' : 'apply_sub';
+    const currentApplicants = classToUpdate[column] || [];
+
+    if (currentApplicants.includes(userId)) {
+      // 이미 신청한 경우, 취소 확인
+      if (confirm('신청을 취소하시겠습니까?')) {
+        const updatedApplicants = currentApplicants.filter(id => id !== userId);
+        await updateClassApplicants(classId, column, updatedApplicants);
+      }
+    } else {
+      // 신규 신청
+      const updatedApplicants = [...currentApplicants, userId];
+      await updateClassApplicants(classId, column, updatedApplicants);
+    }
+  };
+
+  const updateClassApplicants = async (classId: string, column: string, applicants: string[]) => {
+    const { error } = await supabase
+      .from('classes')
+      .update({ [column]: applicants })
+      .eq('id', classId);
+
+    if (error) {
+      console.error('Error updating applicants:', error);
+    } else {
+      fetchData();
+    }
+  };
+
+  const groupedClasses = classes.reduce((acc, classItem) => {
+    const inquiry = inquiries.find(i => i.id === classItem.inquiry_id);
     const institution = inquiry?.institution || 'Unknown';
 
     if (!acc[institution]) {
@@ -77,8 +130,8 @@ export default async function ClassApplicationPage() {
           <div key={institution} className={styles.institutionSection}>
             <div className={styles.cardsContainer}>
               {groupedClasses[institution].map((classItem: Class) => {
-                const inquiry = (inquiries as Inquiry[]).find(i => i.id === classItem.inquiry_id);
-                const classSchedules = (schedules as Schedule[]).filter(s => s.class_id === classItem.id);
+                const inquiry = inquiries.find(i => i.id === classItem.inquiry_id);
+                const classSchedules = schedules.filter(s => s.class_id === classItem.id);
 
                 return (
                   <div key={classItem.id} className={styles.card}>
@@ -119,11 +172,13 @@ export default async function ClassApplicationPage() {
                     </div>
                     <div className={styles.applicationButtons}>
                       <button
+                        onClick={() => handleApply(classItem.id, 'main')}
                         className={classItem.apply_main?.includes(userId || '') ? styles.appliedButton : styles.applyButton}
                       >
                         {classItem.apply_main?.includes(userId || '') ? '주강사 신청됨' : '주강사 신청'}
                       </button>
                       <button
+                        onClick={() => handleApply(classItem.id, 'sub')}
                         className={classItem.apply_sub?.includes(userId || '') ? styles.appliedButton : styles.applyButton}
                       >
                         {classItem.apply_sub?.includes(userId || '') ? '보조강사 신청됨' : '보조강사 신청'}
@@ -138,4 +193,6 @@ export default async function ClassApplicationPage() {
       )}
     </div>
   );
-}
+};
+
+export default ClassApplicationPage;

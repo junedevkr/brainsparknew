@@ -1,6 +1,8 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import styles from './ClassSchedule.module.css'
+'use client';
+
+import { useState, useEffect } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import styles from './ClassSchedule.module.css';
 
 interface Class {
   id: string;
@@ -31,37 +33,50 @@ interface Schedule {
   sub_instructor: string[];
 }
 
-export default async function ClassSchedulePage() {
-  const supabase = createServerComponentClient({ cookies })
-  
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return <div>로그인이 필요합니다.</div>
+const ClassSchedulePage = () => {
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      } else {
+        setLoading(false);
+        return;
+      }
+
+      const [classesResponse, inquiriesResponse, schedulesResponse] = await Promise.all([
+        supabase.from('classes').select('*').or(`instructor_main.cs.{${user.id}},instructor_sub.cs.{${user.id}}`),
+        supabase.from('inquiries').select('*').eq('status', '확정'),
+        supabase.from('class_schedule').select('*').or(`main_instructor.cs.{${user.id}},sub_instructor.cs.{${user.id}}`)
+      ]);
+
+      setClasses(classesResponse.data || []);
+      setInquiries(inquiriesResponse.data || []);
+      setSchedules(schedulesResponse.data || []);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>로딩 중...</div>;
   }
 
-  const fetchData = async () => {
-    const [classesResponse, inquiriesResponse, schedulesResponse] = await Promise.all([
-      supabase.from('classes').select('*').or(`instructor_main.cs.{${user.id}},instructor_sub.cs.{${user.id}}`),
-      supabase.from('inquiries').select('*').eq('status', '확정'),
-      supabase.from('class_schedule').select('*').or(`main_instructor.cs.{${user.id}},sub_instructor.cs.{${user.id}}`)
-    ]);
-
-    return {
-      classes: classesResponse.data as Class[],
-      inquiries: inquiriesResponse.data as Inquiry[],
-      schedules: schedulesResponse.data as Schedule[]
-    };
-  };
-
-  const { classes, inquiries, schedules } = await fetchData();
-
-  if (!classes || !inquiries || !schedules) {
-    return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
+  if (!userId) {
+    return <div>로그인이 필요합니다.</div>;
   }
 
   const filterClasses = classes.filter(
     classItem =>
-      (classItem.instructor_main?.includes(user.id) || classItem.instructor_sub?.includes(user.id)) &&
+      (classItem.instructor_main?.includes(userId) || classItem.instructor_sub?.includes(userId)) &&
       inquiries.some(inquiry => inquiry.id === classItem.inquiry_id)
   );
 
@@ -113,10 +128,10 @@ export default async function ClassSchedulePage() {
                         <p><strong>기관:</strong> {inquiry?.institution}</p>
                         <p><strong>수업 상세:</strong> {classItem.class_details}</p>
                         <p><strong>장비 및 재료:</strong> {classItem.equipment_and_materials}</p>
-                        {classItem.instructor_main?.includes(user.id) && (
+                        {classItem.instructor_main?.includes(userId) && (
                           <p><strong>주강사 비용:</strong> {classItem.confirmed_instructor1_fee}</p>
                         )}
-                        {classItem.instructor_sub?.includes(user.id) && (
+                        {classItem.instructor_sub?.includes(userId) && (
                           <p><strong>보조강사 비용:</strong> {classItem.confirmed_instructor2_fee}</p>
                         )}
                         <p><strong>추가 정보:</strong> {classItem.additional_info}</p>
@@ -151,4 +166,6 @@ export default async function ClassSchedulePage() {
       )}
     </div>
   );
-}
+};
+
+export default ClassSchedulePage;
