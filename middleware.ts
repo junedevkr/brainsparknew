@@ -15,6 +15,13 @@ export async function middleware(req: NextRequest) {
   console.log('Session status:', session ? 'Active' : 'No session');
 
   const publicPages = ['/auth/login', '/auth/signup', '/', '/instructor', '/programs', '/inquiry'];
+
+  // Allow access to static files
+  if (req.nextUrl.pathname.startsWith('/_next') || req.nextUrl.pathname.startsWith('/public') || req.nextUrl.pathname.startsWith('/images')) {
+    console.log('Static file accessed:', req.nextUrl.pathname);
+    return res;
+  }
+
   if (publicPages.includes(req.nextUrl.pathname)) {
     console.log('Public page accessed:', req.nextUrl.pathname);
     return res;
@@ -44,7 +51,6 @@ export async function middleware(req: NextRequest) {
     console.log('Instructor route accessed');
     if (userRole === 'instructor' || userRole === 'superadmin' || userRole === 'staff') {
       console.log('Authorized access to instructor route');
-      // Remove the profileId check for /instructor/dashboard
       if (req.nextUrl.pathname !== '/instructor/dashboard') {
         const profileId = req.nextUrl.pathname.split('/').pop();
         if (profileId && profileId !== session.user.id && userRole === 'instructor') {
