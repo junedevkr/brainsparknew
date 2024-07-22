@@ -34,14 +34,18 @@ export default function Login() {
 
       if (roleError) throw roleError
 
+      // Only allow login for instructor and user roles
+      if (roleData.role !== 'instructor' && roleData.role !== 'user') {
+        throw new Error('인증받은 강사 아이디만 로그인할 수 있습니다.')
+      }
+
       // Redirect based on user role
       switch(roleData.role) {
-        case 'superadmin':
-        case 'staff':
-          router.push('/admin/dashboard')
-          break
         case 'instructor':
           router.push('/instructor/dashboard')
+          break
+        case 'user':
+          router.push('/user/dashboard')
           break
         default:
           router.push('/')
@@ -55,7 +59,6 @@ export default function Login() {
       }
     }
   }
-
 
   return (
     <div className={styles.container}>
