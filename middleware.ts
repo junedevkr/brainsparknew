@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
 
   console.log('Session status:', session ? 'Active' : 'No session');
 
-  const publicPages = ['/auth/login', '/auth/signup', '/', '/instructor', '/programs', '/inquiry'];
+  const publicPages = ['/auth/login', '/auth/signup', '/', '/instructor', '/programs', '/inquiry', '/admin/login'];
 
   // Allow access to static files
   if (
