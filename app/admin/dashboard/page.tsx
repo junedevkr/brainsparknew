@@ -9,6 +9,7 @@ const ClassesPage = dynamic(() => import('./ClassesPage'), { ssr: false })
 const ResultsPage = dynamic(() => import('../payment-calculation/page'), { ssr: false })
 const InstructorsPage = dynamic(() => import('./InstructorsPage'), { ssr: false })
 const AllSchedulesPage = dynamic(() => import('./AllSchedulesPage'), { ssr: false })
+const DataEditPage = dynamic(() => import('./DataEditPage'), { ssr: false });
 
 export default function AdminDashboard() {
   const [activePage, setActivePage] = useState('inquiries')
@@ -16,19 +17,21 @@ export default function AdminDashboard() {
   const renderActivePage = () => {
     switch (activePage) {
       case 'classes':
-        return <ClassesPage />
+        return <ClassesPage />;
       case 'results':
-        return <ResultsPage />
+        return <ResultsPage />;
       case 'instructors':
-        return <InstructorsPage />
+        return <InstructorsPage />;
       case 'inquiries':
-        return <InquiriesPage />
-      case 'AllSchedules':
-          default:
-            return <AllSchedulesPage />
-    
+        return <InquiriesPage />;
+      case 'allSchedules':
+        return <AllSchedulesPage />;
+      case 'dataEdit':
+        return <DataEditPage />;
+      default:
+        return <InquiriesPage />;
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -48,6 +51,9 @@ export default function AdminDashboard() {
         </a>
         <a className={activePage === 'instructors' ? styles.active : ''} onClick={() => setActivePage('instructors')}>
           강사 관리
+        </a>
+        <a className={activePage === 'dataEdit' ? styles.active : ''} onClick={() => setActivePage('dataEdit')}>
+          홈페이지 공개용 데이터 편집
         </a>
       </div>
       {renderActivePage()}

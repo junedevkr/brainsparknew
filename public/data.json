@@ -1,0 +1,186 @@
+{
+  "services": [
+    {
+      "title": "디지털 교육테스트11",
+      "description": "최신 디지털 교육 프로그램을 제공합니다.",
+      "icon": "/images/service1.png"
+    },
+    {
+      "title": "코딩 교육",
+      "description": "다양한 코딩 교육 과정을 통해 프로그래밍 능력을 배양합니다.",
+      "icon": "/images/service2.png"
+    },
+    {
+      "title": "창의적 체험활동",
+      "description": "창의적 사고를 기르는 체험활동을 제공합니다.",
+      "icon": "/images/service3.png"
+    },
+    {
+      "title": "진로체험 교육",
+      "description": "학생들의 진로 선택을 돕는 다양한 체험 교육을 제공합니다.",
+      "icon": "/images/service4.png"
+    },
+    {
+      "title": "온라인 강의",
+      "description": "언제 어디서나 접근 가능한 온라인 강의를 제공합니다.",
+      "icon": "/images/service5.png"
+    }
+  ],
+  "feedbacks": [
+    {
+      "image": "/images/feedback1.jpg",
+      "name": "김철수",
+      "job": "OO초등학교 교사",
+      "feedback": "브레인스파크의 코딩 교육을 통해 많은 것을 배웠습니다."
+    },
+    {
+      "image": "/images/feedback2.jpg",
+      "name": "이영희",
+      "job": "OO초등학교 교사",
+      "feedback": "진로체험 교육이 정말 유익했습니다."
+    },
+    {
+      "image": "/images/feedback3.jpg",
+      "name": "박민수",
+      "job": "OO초등학교 학생",
+      "feedback": "창의적 체험활동을 통해 창의력을 키울 수 있었습니다."
+    },
+    {
+      "image": "/images/feedback4.jpg",
+      "name": "최영수",
+      "job": "OO초등학교 학생",
+      "feedback": "디지털 교육 프로그램이 매우 유익했습니다."
+    }
+  ],
+  "programs": [
+    {
+      "title": "프로그램 1",
+      "description": "프로그램 1에 대한 설명입니다.",
+      "image": "/images/program1.jpeg",
+      "time": "3시간",
+      "people": "20명",
+      "target": "중학생",
+      "details": [
+        "1교시: 어쩌고 저쩌고",
+        "2교시: 어쩌고 저쩌고",
+        "3교시: 어쩌고 저쩌고"
+      ]
+    },
+    {
+      "title": "프로그램 2",
+      "description": "프로그램 2에 대한 설명입니다.",
+      "image": "/images/program2.webp",
+      "time": "2시간",
+      "people": "25명",
+      "target": "고등학생",
+      "details": [
+        "1교시: 어쩌고 저쩌고",
+        "2교시: 어쩌고 저쩌고"
+      ]
+    },
+    {
+      "title": "프로그램 3",
+      "description": "프로그램 3에 대한 설명입니다.",
+      "image": "/images/program3.png",
+      "time": "1.5시간",
+      "people": "30명",
+      "target": "초등학생",
+      "details": [
+        "1교시: 어쩌고 저쩌고",
+        "2교시: 어쩌고 저쩌고",
+        "3교시: 어쩌고 저쩌고",
+        "4교시: 어쩌고 저쩌고"
+      ]
+    },
+    {
+      "title": "프로그램 4",
+      "description": "프로그램 4에 대한 설명입니다.",
+      "image": "/images/program4.webp",
+      "time": "4시간",
+      "people": "15명",
+      "target": "대학생",
+      "details": [
+        "1교시: 어쩌고 저쩌고",
+        "2교시: 어쩌고 저쩌고",
+        "3교시: 어쩌고 저쩌고",
+        "4교시: 어쩌고 저쩌고"
+      ]
+    },
+    {
+      "title": "프로그램 5",
+      "description": "프로그램 5에 대한 설명입니다.",
+      "image": "/images/program5.jpg",
+      "time": "3시간",
+      "people": "20명",
+      "target": "교사",
+      "details": [
+        "1교시: 어쩌고 저쩌고",
+        "2교시: 어쩌고 저쩌고",
+        "3교시: 어쩌고 저쩌고"
+      ]
+    },
+    {
+      "title": "프로그램 6",
+      "description": "프로그램 6에 대한 설명입니다.",
+      "image": "/images/program6.jpg",
+      "time": "2.5시간",
+      "people": "10명",
+      "target": "일반인",
+      "details": [
+        "1교시: 어쩌고 저쩌고",
+        "2교시: 어쩌고 저쩌고",
+        "3교시: 어쩌고 저쩌고"
+      ]
+    }
+  ],
+  "schools": [
+    {
+      "image": "/images/school1.png",
+      "name": "서울초등학교"
+    },
+    {
+      "image": "/images/school2.png",
+      "name": "부산중학교"
+    },
+    {
+      "image": "/images/school3.png",
+      "name": "대구고등학교"
+    },
+    {
+      "image": "/images/school4.png",
+      "name": "인천초등학교"
+    },
+    {
+      "image": "/images/school5.png",
+      "name": "광주중학교"
+    },
+    {
+      "image": "/images/school6.png",
+      "name": "대전고등학교"
+    },
+    {
+      "image": "/images/school7.png",
+      "name": "울산초등학교"
+    },
+    {
+      "image": "/images/school8.png",
+      "name": "세종중학교"
+    },
+    {
+      "image": "/images/school9.png",
+      "name": "경기고등학교"
+    },
+    {
+      "image": "/images/school10.png",
+      "name": "강원초등학교"
+    },
+    {
+      "image": "/images/school11.jpg",
+      "name": "충북중학교"
+    },
+    {
+      "image": "/images/school12.png",
+      "name": "전북고등학교"
+    }
+  ]
+}

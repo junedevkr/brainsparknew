@@ -11,23 +11,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, rgba(255, 179, 186, 0.2), rgba(255, 223, 186, 0.2), rgba(255, 255, 186, 0.2), rgba(186, 255, 201, 0.2), rgba(186, 225, 255, 0.2));
+  /* background: linear-gradient(135deg, rgba(255, 179, 186, 0.2), rgba(255, 223, 186, 0.2), rgba(255, 255, 186, 0.2), rgba(186, 255, 201, 0.2), rgba(186, 225, 255, 0.2)); */
 }
 
 .intro {
-  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  text-align: right;
   margin-bottom: 2rem;
+  margin-top: 2rem;
 }
 
 .intro h1 {
-  font-size: 3rem;
   color: #007bff;
+  font-size: 3rem;
+  margin-top: 0;
 }
 
 .intro p {
   font-size: 1.25rem;
   max-width: 600px;
   margin: 0 auto;
+  margin-bottom: 0;
 }
 
 .services, .feedbacks, .programs, .process, .blog, .faq {
@@ -49,7 +54,7 @@
   overflow-x: auto;
 }
 
-.service, .feedback, .program, .blogItem {
+.feedback, .program, .blogItem {
   flex: 0 0 30%;
   margin: 1rem;
   padding: 1rem;
@@ -71,6 +76,56 @@
 .serviceImage, .feedbackImage, .blogImage, .programImage, .schoolImage {
   border-radius: 0.25rem;
 }
+
+.programImage {
+  width: auto;
+  height: auto;
+  max-width: 200px;
+  height: auto;
+}
+
+.service {
+  display: flex;
+  align-items: stretch;
+  padding: 20px;
+  text-align: left;
+  max-height: 450px; /* 전체 서비스 항목의 최대 높이 설정 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+}
+
+.serviceImage {
+  width: auto; /* 너비를 자동으로 조정 */
+  max-width: 450px; /* 이미지 최대 너비 설정 */
+  max-height: 450px; /* 이미지 최대 높이 설정 */
+  object-fit: contain;
+  margin-right: 20px; /* 이미지와 텍스트 사이의 간격 */
+  margin-left: 20px; /* 이미지와 텍스트 사이의 간격 */
+}
+
+
+.serviceContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: right;
+  overflow-y: auto;
+  padding: 30px;
+  z-index: 1;
+  word-wrap: none;
+}
+
+.service h3 {
+  margin: 0 0 10px 0;
+  font-size: 2.4em;
+}
+
+.service p {
+  margin: 0;
+  font-size: 1.8em;
+}
+
 
 .feedbackImage {
   border-radius: 50%;
@@ -125,16 +180,19 @@
 .schoolcontainer {
   overflow: hidden;
   margin: 50px auto;
+  max-width: 1200px;
+  position: relative;
+  width: 100%;
 }
 
 .banner {
   display: flex;
   height: 150px;
-  width: calc(200px * 24);
+  width: calc(200px * 20);
   list-style: none;
   padding: 0;
   margin: 0;
-  animation: bannermove 50s linear infinite;
+  animation: bannermove 60s linear infinite;
 }
 
 .box {
@@ -173,18 +231,20 @@
 }
 
 
-
 .processList {
   display: flex;
   justify-content: space-around;
   align-items: center;
   position: relative;
+  margin-bottom: 20px; /* Add some margin to avoid overlap with other sections */
+  z-index: 2; /* Ensure circles and text are above the line */
 }
 
 .processItem {
   flex: 1;
   text-align: center;
   position: relative;
+  z-index: 2; /* Ensure circles and text are above the line */
 }
 
 .circle {
@@ -198,31 +258,39 @@
   align-items: center;
   font-size: 1rem;
   margin: 0 auto;
+  z-index: 999; /* Ensure circles and text are above the line */
 }
 
-.line {
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background: #007bff;
-}
-
-.processItem:not(:last-child)::after {
+.processItem::before,
+.processItem::after {
   content: '';
   position: absolute;
   top: 50%;
-  right: -40px;
-  width: 80px;
-  height: 2px;
+  width: 50%;
+  height: 5px;
   background: #007bff;
-  z-index: -1;
+  /* background: #ff0000; */
+  z-index: 0;
+}
+
+.processItem::before {
+  left: 0;
+  transform: translateX(-70%);
+}
+
+.processItem::after {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.processItem:first-child::before {
+  display: none;
 }
 
 .processItem:last-child::after {
   display: none;
 }
+
 
 .faqList details {
   margin-bottom: 1rem;
@@ -236,7 +304,7 @@
 .footer {
   background: #343a40;
   color: #ffffff;
-  width: 100%;
+  width: 100vw;
   padding: 2rem 1rem;
   text-align: center;
 }
@@ -290,4 +358,23 @@
 
 .footer p {
   margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .service {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-height: none; /* 모바일에서는 높이 제한 해제 */
+  }
+
+  .serviceImage {
+    margin-right: 0;
+    margin-bottom: 15px;
+    max-width: 100%; /* 모바일에서 이미지 너비 최대화 */
+  }
+
+  .serviceContent {
+    max-height: none; /* 모바일에서는 높이 제한 해제 */
+  }
 }

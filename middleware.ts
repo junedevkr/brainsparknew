@@ -17,7 +17,12 @@ export async function middleware(req: NextRequest) {
   const publicPages = ['/auth/login', '/auth/signup', '/', '/instructor', '/programs', '/inquiry'];
 
   // Allow access to static files
-  if (req.nextUrl.pathname.startsWith('/_next') || req.nextUrl.pathname.startsWith('/public') || req.nextUrl.pathname.startsWith('/images')) {
+  if (
+    req.nextUrl.pathname.startsWith('/_next') || 
+    req.nextUrl.pathname.startsWith('/public') || 
+    req.nextUrl.pathname.startsWith('/images') ||
+    req.nextUrl.pathname.startsWith('/data.json')
+  ) {
     console.log('Static file accessed:', req.nextUrl.pathname);
     return res;
   }
