@@ -117,7 +117,7 @@ const ClassDetails = () => {
                 )}
               </td>
             </tr>
-          ))}
+          ))}ㄱ
         </tbody>
       </table>
       <button onClick={isEditingInquiry ? saveInquiryChanges : handleEditInquiry}>
