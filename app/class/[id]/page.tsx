@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import styles from './ClassDetail.module.css';
+import styles from './ClassDetails.module.css';
 
 const ClassDetails = () => {
   const router = useRouter();

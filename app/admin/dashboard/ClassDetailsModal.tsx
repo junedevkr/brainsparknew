@@ -376,7 +376,7 @@ const ClassDetailsModal: React.FC<ClassDetailsModalProps> = ({ classId, onClose 
                         <div>
                           {classData[key]?.map((instructorId: string) => (
                             <div key={instructorId}>
-                              <a href={`/admin/instructor/${instructorId}`} target="_blank" rel="noopener noreferrer">
+                              <a href={`/instructor/${instructorId}`} target="_blank" rel="noopener noreferrer">
                                 {renderInstructorName(instructorId)}
                               </a>
                             </div>
